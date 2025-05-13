@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purrfect Playground - A Website for Cats</title>
+    <meta name="description" content="An interactive website designed specifically for feline entertainment with games, videos, and sound stimulation">
+    <meta name="keywords" content="cat website, feline entertainment, interactive cat games, cat videos, cat sounds">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        display: ['Comic Neue', 'cursive']
+                    },
+                    colors: {
+                        catblue: '#3b82f6',
+                        catpurple: '#8b5cf6',
+                        catpink: '#ec4899',
+                        catyellow: '#f59e0b',
+                        catgreen: '#10b981'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        @keyframes birdFly {
+            0% { transform: translateX(-100px) translateY(0); }
+            25% { transform: translateX(25vw) translateY(-50px); }
+            50% { transform: translateX(50vw) translateY(0); }
+            75% { transform: translateX(75vw) translateY(-30px); }
+            100% { transform: translateX(100vw) translateY(0); }
+        }
+        @keyframes mouseRun {
+            0% { transform: translateX(100vw) translateY(0); }
+            25% { transform: translateX(75vw) translateY(20px); }
+            50% { transform: translateX(50vw) translateY(0); }
+            75% { transform: translateX(25vw) translateY(10px); }
+            100% { transform: translateX(-100px) translateY(0); }
+        }
+        @keyframes fishSwim {
+            0% { transform: translateX(-100px) translateY(0); }
+            25% { transform: translateX(25vw) translateY(20px); }
+            50% { transform: translateX(50vw) translateY(0); }
+            75% { transform: translateX(75vw) translateY(-10px); }
+            100% { transform: translateX(100vw) translateY(0); }
+        }
+        @keyframes laserMove {
+            0% { left: 10%; top: 20%; }
+            25% { left: 80%; top: 30%; }
+            50% { left: 30%; top: 70%; }
+            75% { left: 70%; top: 40%; }
+            100% { left: 20%; top: 60%; }
+        }
+        
+        .bounce { animation: bounce 2s infinite; }
+        .float { animation: float 3s infinite ease-in-out; }
+        .bird { animation: birdFly 15s linear infinite; }
+        .mouse { animation: mouseRun 20s linear infinite; }
+        .fish { animation: fishSwim 12s linear infinite; }
+        .laser-dot { animation: laserMove 8s linear infinite; }
+        
+        .interactive {
+            transition: transform 0.2s, filter 0.2s;
+            cursor: pointer;
+        }
+        .interactive:hover, .interactive:active {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px rgba(255, 255, 0, 0.7));
+        }
+        
+        .cat-button {
+            padding: 2rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+        }
+        
+        .video-container {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .sound-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sound-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .catnip-bg {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+        
+        .grass {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0,100 Q25,80 50,100 Q75,60 100,100 Z" fill="%234CAF50"/></svg>') repeat-x;
+            background-size: 100px 100px;
+            animation: grassWave 5s linear infinite;
+        }
+        
+        @keyframes grassWave {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 100px; }
+        }
+        
+        .nav-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .human-guide {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Loading screen */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .nav-btn {
+                width: 60px;
+                height: 60px;
+            }
+            
+            h1 {
+                font-size: 3rem !important;
+            }
+            
+            .sound-btn {
+                width: 80px;
+                height: 80px;
+            }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #8b5cf6;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7c3aed;
+        }
+    </style>
+</head>
+<body class="bg-blue-50 font-sans">
+    <!-- Loading Screen -->
+    <div class="loader">
+        <div class="loader-spinner"></div>
+        <h2 class="text-white text-2xl mt-4 font-display">Loading Purrfect Playground...</h2>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white bg-opacity-90 shadow-lg p-4 flex justify-around items-center z-50">
+        <div class="nav-btn bg-red-200 hover:bg-red-300" onclick="showSection('home')" title="Home">
+            <i class="fas fa-home text-3xl text-red-700"></i>
+        </div>
+        <div class="nav-btn bg-yellow-200 hover:bg-yellow-300" onclick="showSection('play')" title="Play">
+            <i class="fas fa-gamepad text-3xl text-yellow-700"></i>
+        </div>
+        <div class="nav-btn bg-green-200 hover:bg-green-300" onclick="showSection('videos')" title="Videos">
+            <i class="fas fa-video text-3xl text-green-700"></i>
+        </div>
+        <div class="nav-btn bg-blue-200 hover:bg-blue-300" onclick="showSection('sounds')" title="Sounds">
+            <i class="fas fa-volume-up text-3xl text-blue-700"></i>
+        </div>
+        <div class="nav-btn bg-purple-200 hover:bg-purple-300" onclick="showSection('catnip')" title="Relax">
+            <i class="fas fa-spa text-3xl text-purple-700"></i>
+        </div>
+        <div class="nav-btn bg-pink-200 hover:bg-pink-300" onclick="showSection('human')" title="Human Guide">
+            <i class="fas fa-user text-3xl text-pink-700"></i>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="min-h-screen pt-16 pb-32 px-4 relative overflow-hidden bg-gradient-to-br from-catblue to-catpurple">
+        <div class="absolute top-10 left-10 w-16 h-16 bg-red-500 rounded-full bounce interactive" onclick="playSound('boing')"></div>
+        <div class="absolute top-20 right-20 w-20 h-20 bg-yellow-400 rounded-full float interactive" onclick="playSound('crinkle')"></div>
+        <div class="absolute top-1/3 left-1/4 w-24 h-24 bg-blue-400 rounded-full bounce interactive" style="animation-delay: 0.5s;" onclick="playSound('boing')"></div>
+        
+        <div class="bird absolute top-1/4 left-0 w-16 h-16">
+            <i class="fas fa-dove text-4xl text-gray-700 interactive" onclick="playSound('bird')"></i>
+        </div>
+        
+        <div class="mouse absolute top-2/3 left-0 w-16 h-16">
+            <i class="fas fa-mouse text-4xl text-gray-600 interactive" onclick="playSound('mouse')"></i>
+        </div>
+        
+        <div class="text-center mt-16">
+            <h1 class="text-6xl md:text-8xl font-bold text-white mb-6 font-display">Purrfect Playground</h1>
+            <p class="text-2xl md:text-3xl text-white mb-8">A Meow-tastic Website for Feline Friends!</p>
+            
+            <div class="max-w-2xl mx-auto bg-white bg-opacity-80 rounded-xl p-6 shadow-lg backdrop-blur-sm">
+                <div class="flex justify-center space-x-6">
+                    <div class="cat-button bg-red-200" onclick="showSection('play')" title="Play Area">
+                        <i class="fas fa-gamepad text-4xl text-red-700"></i>
+                    </div>
+                    <div class="cat-button bg-yellow-200" onclick="showSection('videos')" title="Cat TV">
+                        <i class="fas fa-video text-4xl text-yellow-700"></i>
+                    </div>
+                    <div class="cat-button bg-green-200" onclick="showSection('sounds')" title="Sound Safari">
+                        <i class="fas fa-volume-up text-4xl text-green-700"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Play Area -->
+    <section id="play" class="min-h-screen pt-16 pb-32 px-4 hidden bg-gradient-to-br from-catgreen to-catblue relative overflow-hidden">
+        <div class="text-center mb-12">
+            <h2 class="text-5xl font-bold text-white mb-4 font-display">Paw-some Play Zone</h2>
+            <p class="text-xl text-white">Tap, swipe, and chase to your heart's content!</p>
+        </div>
+        
+        <!-- Laser Pointer Game -->
+        <div class="max-w-4xl mx-auto bg-white bg-opacity-80 rounded-xl p-6 shadow-lg mb-12 relative backdrop-blur-sm" style="height: 400px;">
+            <h3 class="text-3xl font-bold text-red-500 mb-4">Laser Chase</h3>
+            <div class="laser-dot absolute w-8 h-8 bg-red-500 rounded-full shadow-lg shadow-red-300 interactive" onclick="playSound('laser')"></div>
+        </div>
+        
+        <!-- Fish Pond -->
+        <div class="max-w-4xl mx-auto bg-blue-100 bg-opacity-80 rounded-xl p-6 shadow-lg relative overflow-hidden backdrop-blur-sm" style="height: 200px;">
+            <h3 class="text-3xl font-bold text-blue-700 mb-4">Fish Pond</h3>
+            <div class="fish absolute top-1/2 left-0 w-16 h-16">
+                <i class="fas fa-fish text-4xl text-orange-500 interactive" onclick="playSound('splash')"></i>
+            </div>
+            <div class="fish absolute top-1/3 left-0 w-16 h-16" style="animation-delay: 3s;">
+                <i class="fas fa-fish text-4xl text-blue-500 interactive" style="transform: scaleX(-1);" onclick="playSound('splash')"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Gallery -->
+    <section id="videos" class="min-h-screen pt-16 pb-32 px-4 hidden bg-gradient-to-br from-catpink to-catpurple">
+        <div class="text-center mb-12">
+            <h2 class="text-5xl font-bold text-white mb-4 font-display">Feline TV</h2>
+            <p class="text-xl text-white">Endless entertainment for curious kitties!</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <div class="bg-white bg-opacity-80 rounded-xl shadow-lg overflow-hidden backdrop-blur-sm">
+                <div class="video-container">
+                    <video loop muted autoplay playsinline onclick="playSound('bird')">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-small-birds-in-a-tree-17703-large.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-2xl font-bold text-gray-800">Birds in a Tree</h3>
+                    <p class="text-gray-600">Watch these colorful birds flutter about</p>
+                </div>
+            </div>
+            
+            <div class="bg-white bg-opacity-80 rounded-xl shadow-lg overflow-hidden backdrop-blur-sm">
+                <div class="video-container">
+                    <video loop muted autoplay playsinline onclick="playSound('mouse')">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-white-mouse-on-a-table-17825-large.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-2xl font-bold text-gray-800">Curious Mouse</h3>
+                    <p class="text-gray-600">A little mouse explores the table</p>
+                </div>
+            </div>
+            
+            <div class="bg-white bg-opacity-80 rounded-xl shadow-lg overflow-hidden backdrop-blur-sm">
+                <div class="video-container">
+                    <video loop muted autoplay playsinline onclick="playSound('fish')">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-fish-swimming-in-a-water-tank-17803-large.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-2xl font-bold text-gray-800">Aquarium Fish</h3>
+                    <p class="text-gray-600">Colorful fish swimming in circles</p>
+                </div>
+            </div>
+            
+            <div class="bg-white bg-opacity-80 rounded-xl shadow-lg overflow-hidden backdrop-blur-sm">
+                <div class="video-container">
+                    <video loop muted autoplay playsinline onclick="playSound('squirrel')">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-squirrel-eating-nuts-17710-large.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-2xl font-bold text-gray-800">Squirrel Snacking</h3>
+                    <p class="text-gray-600">A squirrel enjoys some tasty nuts</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Soundboard -->
+    <section id="sounds" class="min-h-screen pt-16 pb-32 px-4 hidden bg-gradient-to-br from-catyellow to-catpink">
+        <div class="text-center mb-12">
+            <h2 class="text-5xl font-bold text-white mb-4 font-display">Sound Safari</h2>
+            <p class="text-xl text-white">Tap to hear exciting sounds!</p>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div class="sound-btn bg-red-200 hover:bg-red-300" onclick="playSound('bird')" title="Birds">
+                <i class="fas fa-dove text-4xl text-red-700"></i>
+            </div>
+            
+            <div class="sound-btn bg-blue-200 hover:bg-blue-300" onclick="playSound('splash')" title="Water">
+                <i class="fas fa-fish text-4xl text-blue-700"></i>
+            </div>
+            
+            <div class="sound-btn bg-gray-200 hover:bg-gray-300" onclick="playSound('mouse')" title="Mouse">
+                <i class="fas fa-mouse text-4xl text-gray-700"></i>
+            </div>
+            
+            <div class="sound-btn bg-green-200 hover:bg-green-300" onclick="playSound('crinkle')" title="Crinkles">
+                <i class="fas fa-scroll text-4xl text-green-700"></i>
+            </div>
+            
+            <div class="sound-btn bg-purple-200 hover:bg-purple-300" onclick="playSound('purr')" title="Purring">
+                <i class="fas fa-cat text-4xl text-purple-700"></i>
+            </div>
+            
+            <div class="sound-btn bg-pink-200 hover:bg-pink-300" onclick="playSound('meow')" title="Meow">
+                <i class="fas fa-paw text-4xl text-pink-700"></i>
+            </div>
+            
+            <div class="sound-btn bg-indigo-200 hover:bg-indigo-300" onclick="playSound('squirrel')" title="Squirrel">
+                <i class="fas fa-otter text-4xl text-indigo-700"></i>
+            </div>
+            
+            <div class="sound-btn bg-orange-200 hover:bg-orange-300" onclick="playSound('laser')" title="Laser">
+                <i class="fas fa-bullseye text-4xl text-orange-700"></i>
+            </div>
+            
+            <div class="sound-btn bg-teal-200 hover:bg-teal-300" onclick="playSound('treat')" title="Treats">
+                <i class="fas fa-cookie-bite text-4xl text-teal-700"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catnip Corner -->
+    <section id="catnip" class="min-h-screen pt-16 pb-32 px-4 hidden catnip-bg relative overflow-hidden">
+        <div id="clouds"></div>
+        <div class="grass"></div>
+        
+        <div class="text-center mb-12 relative z-10">
+            <h2 class="text-5xl font-bold text-purple-700 mb-4 font-display">Catnip Corner</h2>
+            <p class="text-xl text-gray-700">A peaceful place to relax and unwind</p>
+        </div>
+        
+        <div class="max-w-2xl mx-auto bg-white bg-opacity-70 rounded-xl p-8 shadow-lg relative z-10 backdrop-blur-sm">
+            <div class="flex justify-center space-x-8 mb-8">
+                <button class="cat-button bg-purple-200" onclick="playSound('purr')" title="Purring">
+                    <i class="fas fa-cat text-4xl text-purple-700"></i>
+                </button>
+                <button class="cat-button bg-blue-200" onclick="playSound('rain')" title="Rain">
+                    <i class="fas fa-cloud-rain text-4xl text-blue-700"></i>
+                </button>
+                <button class="cat-button bg-green-200" onclick="playSound('wind')" title="Wind">
+                    <i class="fas fa-wind text-4xl text-green-700"></i>
+                </button>
+            </div>
+            
+            <div class="text-center">
+                <p class="text-lg text-gray-700 mb-4">Enjoy the calming atmosphere...</p>
+                <div class="w-full h-2 bg-purple-200 rounded-full overflow-hidden">
+                    <div id="relaxBar" class="h-full bg-purple-600 rounded-full" style="width: 0%"></div>
+                </div>
+                <p id="relaxText" class="text-sm text-purple-700 mt-2">Relaxation level: 0%</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Human Guide -->
+    <section id="human" class="min-h-screen pt-16 pb-32 px-4 hidden bg-gray-100">
+        <div class="human-guide">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center font-display">Human Assistant Guide</h2>
+            
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-indigo-700 mb-3">🐾 Introducing Your Cat to Purrfect Playground</h3>
+                <ol class="list-decimal pl-6 space-y-2 text-gray-700">
+                    <li><strong>Start slowly:</strong> Let your cat explore the website at their own pace. Some cats may be cautious at first.</li>
+                    <li><strong>Use a tablet:</strong> For best results, place a tablet on the floor or at cat-eye level. Ensure it's in a sturdy case!</li>
+                    <li><strong>Supervise initial sessions:</strong> Watch how your cat interacts and remove any stress factors.</li>
+                    <li><strong>Keep sessions short:</strong> 10-15 minutes at a time is perfect to prevent overstimulation.</li>
+                    <li><strong>Try different sections:</strong> Some cats prefer videos, others love the interactive games.</li>
+                </ol>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-indigo-700 mb-3">⚙️ Settings & Features</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="text-xl font-bold text-blue-700 mb-2">Treat Timer</h4>
+                        <div class="flex items-center space-x-4">
+                            <input type="range" min="1" max="30" value="10" class="w-full" id="treatTimer">
+                            <span id="treatTimeDisplay" class="font-bold">10 min</span>
+                        </div>
+                        <button onclick="startTreatTimer()" class="mt-3 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">Start Timer</button>
+                        <p id="treatAlert" class="text-sm text-blue-700 mt-2 hidden">Time for treats! Your cat deserves a reward!</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="text-xl font-bold text-green-700 mb-2">Volume Control</h4>
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-volume-down text-gray-600"></i>
+                            <input type="range" min="0" max="1" step="0.1" value="0.7" class="w-full" id="volumeControl">
+                            <i class="fas fa-volume-up text-gray-600"></i>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">Adjust sound levels for your cat's comfort</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-yellow-50 p-6 rounded-lg">
+                <h3 class="text-2xl font-bold text-yellow-700 mb-3">🐱 Cat Behavior Tips</h3>
+                <div class="space-y-4 text-gray-700">
+                    <p><strong>Tail twitching?</strong> Your cat is engaged! This shows they're interested in what they're seeing.</p>
+                    <p><strong>Ears back or hiding?</strong> They might be overwhelmed. Try a quieter section like Catnip Corner.</p>
+                    <p><strong>Pawing at the screen?</strong> Perfect! This means they're interacting naturally. Consider a screen protector.</p>
+                    <p><strong>Walking away?</strong> Cats have short attention spans. Try again later when they're more playful.</p>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center">
+                <button onclick="showSection('home')" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-bold transition">
+                    <i class="fas fa-paw mr-2"></i> Back to Cat Mode
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Audio Elements -->
+    <audio id="birdSound" src="https://assets.mixkit.co/sfx/preview/mixkit-bird-chirping-1246.mp3" preload="auto"></audio>
+    <audio id="mouseSound" src="https://assets.mixkit.co/sfx/preview/mixkit-small-rodent-squeaking-112.mp3" preload="auto"></audio>
+    <audio id="splashSound" src="https://assets.mixkit.co/sfx/preview/mixkit-water-splash-1185.mp3" preload="auto"></audio>
+    <audio id="crinkleSound" src="https://assets.mixkit.co/sfx/preview/mixkit-rolling-paper-1060.mp3" preload="auto"></audio>
+    <audio id="boingSound" src="https://assets.mixkit.co/sfx/preview/mixkit-bouncing-ball-with-delay-1174.mp3" preload="auto"></audio>
+    <audio id="purrSound" src="https://assets.mixkit.co/sfx/preview/mixkit-cat-purring-119.mp3" preload="auto"></audio>
+    <audio id="meowSound" src="https://assets.mixkit.co/sfx/preview/mixkit-cartoon-cat-meow-241.mp3" preload="auto"></audio>
+    <audio id="squirrelSound" src="https://assets.mixkit.co/sfx/preview/mixkit-squirrel-chirping-118.mp3" preload="auto"></audio>
+    <audio id="laserSound" src="https://assets.mixkit.co/sfx/preview/mixkit-laser-weapon-shot-1681.mp3" preload="auto"></audio>
+    <audio id="treatSound" src="https://assets.mixkit.co/sfx/preview/mixkit-dry-cat-food-hitting-plastic-bowl-305.mp3" preload="auto"></audio>
+    <audio id="rainSound" src="https://assets.mixkit.co/sfx/preview/mixkit-rain-loop-1243.mp3" preload="auto" loop></audio>
+    <audio id="windSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wind-loop-1244.mp3" preload="auto" loop></audio>
+    <audio id="fishSound" src="https://assets.mixkit.co/sfx/preview/mixkit-bubbles-in-water-1180.mp3" preload="auto"></audio>
+
+    <script>
+        // Show loading screen initially
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loader').style.opacity = '0';
+                setTimeout(function() {
+                    document.querySelector('.loader').style.display = 'none';
+                }, 500);
+            }, 1500);
+            
+            // Preload all media
+            preloadMedia();
+        });
+        
+        // Preload videos and audio
+        function preloadMedia() {
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                video.load();
+            });
+            
+            const audioElements = document.querySelectorAll('audio');
+            audioElements.forEach(audio => {
+                audio.load();
+            });
+        }
+        
+        // Show initial section
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('home');
+            createClouds();
+            startRelaxationTimer();
+            
+            // Set volume from slider
+            const volumeControl = document.getElementById('volumeControl');
+            volumeControl.addEventListener('input', function() {
+                const volume = this.value;
+                const allAudio = document.querySelectorAll('audio');
+                allAudio.forEach(audio => {
+                    audio.volume = volume;
+                });
+                
+                // Store volume preference
+                localStorage.setItem('catVolume', volume);
+            });
+            
+            // Load saved volume
+            const savedVolume = localStorage.getItem('catVolume') || 0.7;
+            volumeControl.value = savedVolume;
+            const allAudio = document.querySelectorAll('audio');
+            allAudio.forEach(audio => {
+                audio.volume = savedVolume;
+            });
+            
+            // Update treat timer display
+            document.getElementById('treatTimer').addEventListener('input', function() {
+                document.getElementById('treatTimeDisplay').textContent = `${this.value} min`;
+            });
+        });
+        
+        // Section navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Stop ambient sounds when leaving catnip corner
+            if(sectionId !== 'catnip') {
+                document.getElementById('rainSound').pause();
+                document.getElementById('windSound').pause();
+            }
+            
+            // Scroll to top when changing sections
+            window.scrollTo(0, 0);
+        }
+        
+        // Sound player
+        function playSound(soundType) {
+            const sound = document.getElementById(soundType + 'Sound');
+            
+            // Special cases for looping sounds
+            if(soundType === 'rain' || soundType === 'wind') {
+                const otherSound = soundType === 'rain' ? 'windSound' : 'rainSound';
+                document.getElementById(otherSound).pause();
+                
+                if(sound.paused) {
+                    sound.play();
+                } else {
+                    sound.pause();
+                }
+                return;
+            }
+            
+            // For all other sounds
+            sound.currentTime = 0;
+            sound.play();
+        }
+        
+        // Create clouds for catnip corner
+        function createClouds() {
+            const cloudContainer = document.getElementById('clouds');
+            for(let i = 0; i < 8; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                
+                // Random size and position
+                const size = Math.random() * 60 + 40;
+                const left = Math.random() * 100;
+                const top = Math.random() * 50;
+                const opacity = Math.random() * 0.6 + 0.2;
+                const animationDuration = Math.random() * 40 + 60;
+                
+                cloud.style.width = `${size}px`;
+                cloud.style.height = `${size * 0.6}px`;
+                cloud.style.left = `${left}%`;
+                cloud.style.top = `${top}%`;
+                cloud.style.opacity = opacity;
+                cloud.style.animation = `float ${animationDuration}s infinite linear`;
+                cloud.style.animationDelay = `${Math.random() * 20}s`;
+                
+                cloudContainer.appendChild(cloud);
+            }
+        }
+        
+        // Relaxation timer for catnip corner
+        function startRelaxationTimer() {
+            let relaxLevel = 0;
+            const relaxBar = document.getElementById('relaxBar');
+            const relaxText = document.getElementById('relaxText');
+            
+            setInterval(() => {
+                if(!document.getElementById('catnip').classList.contains('hidden')) {
+                    if(relaxLevel < 100) {
+                        relaxLevel += 1;
+                        relaxBar.style.width = `${relaxLevel}%`;
+                        relaxText.textContent = `Relaxation level: ${relaxLevel}%`;
+                        
+                        if(relaxLevel === 100) {
+                            relaxText.textContent = "Purrfectly relaxed! 😸";
+                        }
+                    }
+                } else {
+                    // Reset when leaving the section
+                    if(relaxLevel > 0) {
+                        relaxLevel = 0;
+                        relaxBar.style.width = '0%';
+                        relaxText.textContent = 'Relaxation level: 0%';
+                    }
+                }
+            }, 3000);
+        }
+        
+        // Treat timer functionality
+        function startTreatTimer() {
+            const minutes = parseInt(document.getElementById('treatTimer').value);
+            document.getElementById('treatTimeDisplay').textContent = `${minutes} min`;
+            
+            const treatAlert = document.getElementById('treatAlert');
+            treatAlert.classList.add('hidden');
+            
+            // Show countdown
+            let secondsLeft = minutes * 60;
+            const countdownInterval = setInterval(() => {
+                secondsLeft--;
+                if(secondsLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    treatAlert.classList.remove('hidden');
+                    playSound('treat');
+                    
+                    // Flash the alert
+                    let flashCount = 0;
+                    const flashInterval = setInterval(() => {
+                        treatAlert.classList.toggle('hidden');
+                        flashCount++;
+                        if(flashCount >= 6) {
+                            clearInterval(flashInterval);
+                            treatAlert.classList.remove('hidden');
+                        }
+                    }, 500);
+                }
+            }, 1000);
+        }
+        
+        // Make interactive elements respond to touch
+        document.querySelectorAll('.interactive').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(1.1)';
+            });
+            
+            element.addEventListener('touchend', function() {
+                this.style.transform = '';
+            });
+        });
+        
+        // Pause videos when not visible
+        document.addEventListener('visibilitychange', function() {
+            if(document.hidden) {
+                document.querySelectorAll('video').forEach(video => {
+                    video.pause();
+                });
+                document.querySelectorAll('audio').forEach(audio => {
+                    audio.pause();
+                });
+            } else {
+                document.querySelectorAll('video').forEach(video => {
+                    if(video.hasAttribute('autoplay')) {
+                        video.play();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
